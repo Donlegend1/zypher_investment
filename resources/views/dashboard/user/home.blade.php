@@ -225,8 +225,23 @@
 						<div class="dashboard-item">
 							<div class="dashboard-inner">
 								<div class="cont">
-									<span class="title">Deposit Balance</span>
-									<h5 class="amount">{{ $user->current_balance ?? '0' }}USD</h5>
+									<span class="title"> Balance</span>
+									<h5 class="amount">{{ number_format( $totalProfitFromReferals+$Totalearnings, 2) ??'0' }}USD</h5>
+								</div>
+
+								<div class="thumb">
+									<img src="/images/dashboard/dashboard1.png" alt="dasboard">
+								</div>
+							</div>
+						</div>
+					</div>
+				
+					<div class="col-sm-6 col-lg-3">
+						<div class="dashboard-item">
+							<div class="dashboard-inner">
+								<div class="cont">
+									<span class="title">Total Withdrawals</span>
+									<h5 class="amount">{{number_format( $totalWithdrwals, 2) ?? '0' }}USD</h5>
 								</div>
 
 								<div class="thumb">
@@ -337,7 +352,7 @@
 											<img src="/images/dashboard/earn/usd.png" alt="dashboard-earn">
 										</div>
 										<div class="cont">
-											<span class="cl-1">{{ $Totalearnings }}</span>
+											<span class="cl-1">{{ number_format($Totalearnings, 2) }}</span>
 											<span class="cl-4">USD</span>
 										</div>
 									</li>
@@ -357,7 +372,7 @@
 								<ul class="mb--5">
 									<li>
 										<div class="cont w-100 p-0">
-											<span class="cl-1">{{$lastReferredUser->full_name??"No referrals"}}</span>
+											<span class="cl-1">{{ $lastReferredUser->full_name ?? 'No referrals' }}</span>
 											<a href="Mailto:demo@mail.com" class="cl-4">Email: <span class="__cf_email__"
 													data-cfemail="d6b2b3bbb996bbb7bfbaf8b5b9bb">[email&#160;protected]</span></a>
 										</div>
@@ -379,7 +394,7 @@
 											<img src="/images/dashboard/earn/usd.png" alt="dashboard-earn">
 										</div>
 										<div class="cont">
-											<span class="cl-1">{{ $totalProfit }}</span>
+											<span class="cl-1">{{ number_format($totalProfitFromReferals, 2 )}}</span>
 											<span class="cl-4">USD</span>
 										</div>
 									</li>

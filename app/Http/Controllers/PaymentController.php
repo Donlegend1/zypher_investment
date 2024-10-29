@@ -122,6 +122,7 @@ class PaymentController extends Controller
         $deposits = Transaction::where('user_id', Auth::user()->id)
             ->where('operation', 'Deposit')
             ->get();
+            // dd($deposits);
 
         // Calculate remaining days for each deposit
         foreach ($deposits as $deposit) {

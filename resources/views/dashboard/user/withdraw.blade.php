@@ -394,6 +394,7 @@
 						<input type="text" name="amount" placeholder="Enter your amount" class="make-amount" required>
 					</div>
 					<div class="form-group">
+						<input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
 						<label for="currency">Currency:</label>
 						<input type="text" name="currency" placeholder="USDT" required>
 					</div>

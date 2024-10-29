@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Transaction;
+use App\Models\Withdrawal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -61,8 +62,10 @@ class HomeController extends Controller
                 )
                 ->groupBy('users.id', 'ref.id', 'ref.full_name', 'users.current_balance')
                 ->paginate(10);
+            $totalWithdrwals = Withdrawal::where('status', 'completed')->sum('amount');
+       
 
-            return view('dashboard.home', compact('users', 'totalUsers', 'totalSales', 'totalVisitors'));
+            return view('dashboard.home', compact('users', 'totalUsers', 'totalSales', 'totalVisitors', 'totalWithdrwals'));
         } else {
             if (!Auth::check()) {
                 abort(403, 'User not logged in');
@@ -117,8 +120,8 @@ class HomeController extends Controller
                 ->get();
 
             // Calculate referral profits
-            $totalProfit = 0;
-            $referrals->each(function ($user) use (&$totalProfit) {
+            $totalProfitFromReferals= 0;
+            $referrals->each(function ($user) use (&$totalProfitFromReferals) {
                 $user->profit = $user->transactions->map(function ($transaction, $index) {
                     if ($index == 0) {
                         $profitPercentage = 0.05;
@@ -130,7 +133,7 @@ class HomeController extends Controller
                     return $transaction->amount * $profitPercentage;
                 })->sum();
 
-                $totalProfit += $user->profit;
+                $totalProfitFromReferals += $user->profit;
             });
             
             $Totalearnings = Transaction::where('user_id', Auth::user()->id)->where('operation', "Profit")->sum('amount');
@@ -146,9 +149,11 @@ class HomeController extends Controller
             $lastReferredUser = User::where('referred_by', Auth::user()->id)
             ->orderBy('created_at', 'desc')
             ->first();
+            $totalWithdrwals = Withdrawal::where('status', 'completed')->where('user_id', Auth::user()->id)->sum('amount');
+        
 
 
-return view('dashboard.user.home', compact('user', 'totalProfit', 'Totalearnings', 'referralsActiveCount', 'referralsWithDepositsCount', 'lastReferredUser'));
+return view('dashboard.user.home', compact('user', 'totalProfitFromReferals', 'Totalearnings', 'referralsActiveCount', 'referralsWithDepositsCount', 'lastReferredUser', 'totalWithdrwals'));
 }
 }
 
